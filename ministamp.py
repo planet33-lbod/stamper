@@ -5,15 +5,24 @@ import io
 app = Flask(__name__)
 
 # Common function to add an image to a PDF, parameterized for flexibility
-def add_image_to_pdf(input_pdf_bytes, image_path, x_coord, y_coord):
+def add_image_to_pdf_with_date(input_pdf_bytes, image_path, x_coord, y_coord):
     doc = fitz.open(stream=input_pdf_bytes, filetype='pdf')
     page = doc[0]  # Assuming stamping the first page
     
-    # Define the rectangle where the image will be placed (hardcoded size)
+    # Define the rectangle where the image will be placed
     img_rect = fitz.Rect(x_coord, y_coord, x_coord + 100, y_coord + 100)
     
     # Insert the image
     page.insert_image(img_rect, filename=image_path)
+    
+    # Calculate y-coordinate for the date, 50 pixels below the image
+    date_y_coord = y_coord + 100 + 50
+    
+    # Get current date
+    current_date = datetime.now().strftime("%Y-%m-%d")
+    
+    # Add current date as text
+    page.insert_text((x_coord, date_y_coord), current_date, fontsize=11, color=(0, 0, 0))
     
     # Save the stamped PDF to a BytesIO object and return it
     output_pdf_bytes = io.BytesIO()
