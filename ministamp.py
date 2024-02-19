@@ -1,6 +1,7 @@
 from flask import Flask, request, send_file
-import fitz
+import fitz  # PyMuPDF
 import io
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -9,20 +10,20 @@ def add_image_to_pdf(input_pdf_bytes, image_path, x_coord, y_coord):
     doc = fitz.open(stream=input_pdf_bytes, filetype='pdf')
     page = doc[0]  # Assuming stamping the first page
     
-    # Define the rectangle where the image will be placed
+    # Define the rectangle where the image will be placed (hardcoded size)
     img_rect = fitz.Rect(x_coord, y_coord, x_coord + 100, y_coord + 100)
     
     # Insert the image
     page.insert_image(img_rect, filename=image_path)
     
-    # Calculate y-coordinate for the date, 50 pixels below the image
-    date_y_coord = y_coord + 100 + 50
-    
     # Get current date
     current_date = datetime.now().strftime("%Y-%m-%d")
+    # Define the position for the date text, 50px below the stamp
+    text_x = x_coord
+    text_y = y_coord + 100  # Adjusted for 50px below the image assuming the image is 100px in height
     
-    # Add current date as text
-    page.insert_text((x_coord, date_y_coord), current_date, fontsize=11, color=(0, 0, 0))
+    # Insert the date text
+    page.insert_text((text_x, text_y), current_date, fontsize=11, color=(0, 0, 0))
     
     # Save the stamped PDF to a BytesIO object and return it
     output_pdf_bytes = io.BytesIO()
