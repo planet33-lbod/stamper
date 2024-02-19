@@ -14,7 +14,7 @@ def stamp_pdf():
     
     # Return the stamped PDF
     stamped_pdf_bytes.seek(0)  # Rewind to the beginning of the file before sending
-    return send_file(stamped_pdf_bytes, attachment_filename='stamped.pdf', as_attachment=True)
+    return send_file(stamped_pdf_bytes, download_name='stamped.pdf', as_attachment=True)
 
 def add_image_to_pdf(input_pdf_bytes):
     # Hardcode the stamp image path
