@@ -17,7 +17,7 @@ def add_image_to_pdf(input_pdf_bytes, image_path, x_coord, y_coord):
     page.insert_image(img_rect, filename=image_path)
     
     # Get current date
-    current_date = datetime.now().strftime("%Y-%m-%d")
+    current_date = datetime.now().strftime("%d.%m.%Y")
     # Define the position for the date text, 50px below the stamp
     text_x = x_coord
     text_y = y_coord + 100  # Adjusted for 50px below the image assuming the image is 100px in height
