@@ -5,7 +5,7 @@ import io
 app = Flask(__name__)
 
 # Common function to add an image to a PDF, parameterized for flexibility
-def add_image_to_pdf_with_date(input_pdf_bytes, image_path, x_coord, y_coord):
+def add_image_to_pdf(input_pdf_bytes, image_path, x_coord, y_coord):
     doc = fitz.open(stream=input_pdf_bytes, filetype='pdf')
     page = doc[0]  # Assuming stamping the first page
     
