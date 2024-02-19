@@ -11,9 +11,6 @@ def stamp_pdf():
     # Assume stamp choice is passed as a form data parameter
     stamp_choice = request.form.get('stamp_choice', '1')  # Default to stamp 1 if not specified
     
-    # Convert PDF file stream to a BytesIO object
-    pdf_bytes = io.BytesIO(pdf_file.read())
-    
     # Define paths for your stamp images
     stamp_images = {
         '1': 'gebucht.png',
@@ -24,8 +21,18 @@ def stamp_pdf():
     # Select the stamp image based on the choice
     image_path = stamp_images.get(stamp_choice, 'gebucht.png')
     
-    # Apply stamp logic
-    stamped_pdf_bytes = add_image_to_pdf(pdf_bytes, image_path, x_coord=200, y_coord=100)
+    # Unique coordinates for each stamp
+    stamp_coordinates = {
+        '1': (200, 100),  # Coordinates for stamp 1
+        '2': (200, 200),  # Coordinates for stamp 2
+        '3': (200, 300),  # Coordinates for stamp 3
+    }
+    
+    # Get coordinates for the selected stamp, default to stamp 1's coordinates
+    x_coord, y_coord = stamp_coordinates.get(stamp_choice, (200, 100))
+    
+    # Apply stamp logic with unique coordinates
+    stamped_pdf_bytes = add_image_to_pdf(pdf_bytes=io.BytesIO(pdf_file.read()), image_path=image_path, x_coord=x_coord, y_coord=y_coord)
     
     # Return the stamped PDF
     stamped_pdf_bytes.seek(0)  # Rewind to the beginning of the file before sending
